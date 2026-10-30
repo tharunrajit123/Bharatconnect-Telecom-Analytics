@@ -1,0 +1,196 @@
+ 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Churn Prediction | BharatConnect</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="logo">
+        Bharat<span>Connect</span>
+    </div>
+
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/customer">New Analysis</a>
+        <a href="/sim-switch">SIM Switching</a>
+        <a href="/history">Prediction History</a>
+        <a href="/dashboard">Dashboard</a>
+    </div>
+</nav>
+
+<section class="result-section">
+
+    <div class="result-header">
+        <p class="small-title">MACHINE LEARNING RESULT</p>
+
+        <h1>
+            Customer Churn <span>Prediction</span>
+        </h1>
+
+        <p>AI-based telecom customer risk analysis</p>
+    </div>
+
+    <div class="result-grid">
+
+        <!-- CHURN PROBABILITY -->
+        <div class="prediction-card">
+            <p class="result-label">CHURN PROBABILITY</p>
+
+            <h2>{{ churn_probability }}%</h2>
+
+            <div class="progress">
+                <div class="progress-bar"
+                     style="width: {{ churn_probability }}%;">
+                </div>
+            </div>
+
+            <div class="prediction-result">
+                <p>Prediction</p>
+                <h3>{{ churn_result | default(churn_prediction | default(prediction | default('Unknown'))) }}</h3>
+            </div>
+        </div>
+
+        <!-- RISK LEVEL -->
+        <div class="risk-card">
+            <p class="result-label">CUSTOMER RISK</p>
+
+            <div class="risk-circle">
+                {{ risk_level | default(risk | default('Unknown')) }}
+            </div>
+
+            <p>Risk Level</p>
+        </div>
+
+    </div>
+
+    <!-- CUSTOMER DETAILS -->
+    <div class="details-card">
+        <h2>Customer Information</h2>
+
+        <div class="details-grid">
+
+            <div>
+                <span>Customer ID</span>
+                <strong>{{ customer_data.get("CustomerID", customer_data.get("customer_id", "Not provided")) }}</strong>
+            </div>
+
+            <div>
+                <span>Age</span>
+                <strong>{{ customer_data.get("Age", "N/A") }}</strong>
+            </div>
+
+            <div>
+                <span>Gender</span>
+                <strong>{{ customer_data.get("Gender", "N/A") }}</strong>
+            </div>
+
+            <div>
+                <span>State</span>
+                <strong>{{ customer_data.get("State", "N/A") }}</strong>
+            </div>
+
+            <div>
+                <span>Region</span>
+                <strong>{{ customer_data.get("Region", "N/A") }}</strong>
+            </div>
+
+            <div>
+                <span>Current SIM</span>
+                <strong>{{ customer_data.get("CurrentSIM", "N/A") }}</strong>
+            </div>
+
+            <div>
+                <span>Plan Type</span>
+                <strong>{{ customer_data.get("PlanType", "N/A") }}</strong>
+            </div>
+
+            <div>
+                <span>Contract Type</span>
+                <strong>{{ customer_data.get("ContractType", "N/A") }}</strong>
+            </div>
+
+            <div>
+                <span>Tenure</span>
+                <strong>{{ customer_data.get("TenureMonths", "N/A") }} Months</strong>
+            </div>
+
+            <div>
+                <span>Monthly Recharge</span>
+                <strong>₹{{ customer_data.get("MonthlyRecharge", "N/A") }}</strong>
+            </div>
+
+            <div>
+                <span>Data Usage</span>
+                <strong>{{ customer_data.get("DataUsageGB", "N/A") }} GB</strong>
+            </div>
+
+            <div>
+                <span>Network Type</span>
+                <strong>{{ customer_data.get("NetworkType", "N/A") }}</strong>
+            </div>
+
+            <div>
+                <span>Network Satisfaction</span>
+                <strong>{{ customer_data.get("NetworkSatisfaction", "N/A") }}/5</strong>
+            </div>
+
+            <div>
+                <span>Call Quality</span>
+                <strong>{{ customer_data.get("CallQualityScore", "N/A") }}/5</strong>
+            </div>
+
+            <div>
+                <span>Support Calls</span>
+                <strong>{{ customer_data.get("SupportCalls", "N/A") }}</strong>
+            </div>
+
+            <div>
+                <span>Complaints</span>
+                <strong>{{ customer_data.get("ComplaintsRaised", "N/A") }}</strong>
+            </div>
+
+            <div>
+                <span>5G Available</span>
+                <strong>{{ customer_data.get("5GAvailableArea", "N/A") }}</strong>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="result-actions">
+        <a href="/customer" class="primary-btn">
+            Analyze Another Customer
+        </a>
+
+        <a href="/history" class="secondary-btn">
+            View Prediction History
+        </a>
+
+        <a href="/dashboard" class="secondary-btn">
+            Analytics Dashboard
+        </a>
+
+        <a href="/" class="secondary-btn">
+            Back to Home
+        </a>
+    </div>
+
+</section>
+
+<footer>
+    <p>© 2026 BharatConnect | Telecom Customer Intelligence</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BharatConnect | Telecom Intelligence</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+
+        <div class="logo">
+            Bharat<span>Connect</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="#features">Features</a>
+            <a href="#about">About</a>
+            <a href="{{ url_for('dashboard') }}">Analytics Dashboard</a>
+            <a href="{{ url_for('history') }}">Prediction History</a>
+        </div>
+                     
+
+    </nav>
+
+
+    <!-- Hero Section -->
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <p class="small-title">
+                AI-POWERED TELECOM ANALYTICS
+            </p>
+
+            <h1>
+                Understand Your
+                <span>Customers.</span>
+            </h1>
+
+            <p class="description">
+                Analyze customer behavior, predict churn,
+                identify SIM switching patterns and discover
+                the reasons behind customer decisions.
+            </p>
+
+            <div class="buttons">
+
+                <a href="/customer" class="primary-btn">
+                    Analyze Customer
+                 </a>
+
+                <a href="#features" class="secondary-btn">
+                    Explore Features
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- Hero Stats -->
+        <div class="hero-card">
+
+            <div class="card-header">
+                <span>Customer Intelligence</span>
+                <span class="status">● LIVE</span>
+            </div>
+
+            <div class="main-stat">
+                <h2>483K+</h2>
+                <p>Customers Analyzed</p>
+            </div>
+
+            <div class="mini-stats">
+
+                <div>
+                    <h3>37.1%</h3>
+                    <p>Churn Rate</p>
+                </div>
+
+                <div>
+                    <h3>185K+</h3>
+                    <p>Switchers</p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Features -->
+    <section class="features" id="features">
+
+        <div class="section-title">
+
+            <p>PLATFORM FEATURES</p>
+
+            <h2>
+                Telecom Intelligence
+                <span>Made Simple</span>
+            </h2>
+
+        </div>
+
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <div class="icon">📊</div>
+
+                <h3>Customer Analytics</h3>
+
+                <p>
+                    Analyze customer demographics,
+                    usage behavior and transaction patterns.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="icon">🤖</div>
+
+                <h3>Churn Prediction</h3>
+
+                <p>
+                    Predict customer churn probability
+                    using Machine Learning.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="icon">📱</div>
+
+                <h3>SIM Switching</h3>
+
+                <a href="{{ url_for('sim_switch') }}">SIM Switching Prediction</a>
+
+                <p>
+                    Predict potential SIM destinations
+                    and understand switching behavior.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="icon">💡</div>
+
+                <h3>Switch Reasons</h3>
+
+                <p>
+                    Identify important reasons behind
+                    customer switching decisions.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- About -->
+    <section class="about" id="about">
+
+        <div>
+
+            <p class="small-title">
+                ABOUT THE PROJECT
+            </p>
+
+            <h2>
+                Data Driven Telecom
+                <span>Decision Making</span>
+            </h2>
+
+            <p>
+                BharatConnect combines Data Science,
+                Machine Learning and Business Intelligence
+                to understand telecom customer behavior.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- Footer -->
+    <footer>
+
+        <p>
+            © 2026 BharatConnect | Telecom Customer Intelligence
+        </p>
+
+    </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,518 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIM Switching Prediction | BharatConnect</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f3f6fc;
+            color: #172b4d;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: #ffffff;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 12px rgba(20, 40, 80, 0.06);
+        }
+
+        .brand {
+            font-size: 23px;
+            font-weight: 800;
+            color: #1769e8;
+            text-decoration: none;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #40516b;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .hero {
+            background: linear-gradient(120deg, #e8f1ff, #f7f9ff);
+            padding: 42px 20px;
+            text-align: center;
+        }
+
+        .eyebrow {
+            color: #1769e8;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .hero h1 {
+            font-size: clamp(28px, 4vw, 38px);
+            margin: 10px 0;
+            color: #102344;
+        }
+
+        .hero p {
+            max-width: 650px;
+            margin: auto;
+            color: #64748b;
+            font-size: 15px;
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .form-card {
+            background: #ffffff;
+            padding: 32px;
+            border-radius: 18px;
+            box-shadow: 0 12px 40px rgba(30, 55, 100, 0.08);
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .section-number {
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e8f1ff;
+            color: #1769e8;
+            border-radius: 11px;
+            font-weight: 800;
+        }
+
+        .section-heading h2 {
+            font-size: 19px;
+            color: #183153;
+        }
+
+        .section-heading p {
+            color: #7b879b;
+            font-size: 13px;
+        }
+
+        .form-section {
+            margin-bottom: 32px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .field {
+            min-width: 0;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #394b65;
+            margin-bottom: 7px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            min-width: 0;
+            padding: 12px 13px;
+            border: 1px solid #dce3ee;
+            border-radius: 9px;
+            background: #ffffff;
+            color: #26364d;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #2878ed;
+            box-shadow: 0 0 0 3px rgba(40, 120, 237, 0.12);
+        }
+
+        .form-actions {
+            border-top: 1px solid #edf0f5;
+            padding-top: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .note {
+            font-size: 12px;
+            color: #78869b;
+            max-width: 450px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn {
+            display: inline-block;
+            text-decoration: none;
+            border: none;
+            border-radius: 9px;
+            padding: 13px 20px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #1769e8;
+            color: #ffffff;
+            box-shadow: 0 5px 12px rgba(23, 105, 232, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: #0d55c4;
+        }
+
+        .btn-secondary {
+            background: #f0f4fa;
+            color: #40516b;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 25px 15px;
+            color: #8995a7;
+            font-size: 12px;
+        }
+
+        @media (max-width: 760px) {
+            .form-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 16px;
+            }
+
+            .form-card {
+                padding: 22px 18px;
+            }
+
+            .form-actions {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                padding: 15px 5%;
+            }
+
+            .hero {
+                padding: 32px 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="/" class="brand">BharatConnect</a>
+        <a href="/" class="nav-link">← Back to Home</a>
+    </nav>
+
+    <header class="hero">
+        <div class="eyebrow">AI-Powered Telecom Analytics</div>
+        <h1>SIM Switching Prediction</h1>
+        <p>
+            Analyze customer details and estimate the most likely
+            alternative SIM destination using your trained machine learning model.
+        </p>
+    </header>
+
+    <main class="container">
+        <form method="POST" class="form-card">
+
+            <section class="form-section">
+                <div class="section-heading">
+                    <div class="section-number">01</div>
+                    <div>
+                        <h2>Customer Information</h2>
+                        <p>Basic details and current service provider</p>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="age">Age</label>
+                        <input id="age" type="number" name="age"
+                               min="18" max="100" value="30" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="gender">Gender</label>
+                        <select id="gender" name="gender" required>
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="state">State</label>
+                        <input id="state" name="state"
+                               value="Tamil Nadu" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="region">Region</label>
+                        <select id="region" name="region" required>
+                            <option>Urban</option>
+                            <option>Semi-Urban</option>
+                            <option>Rural</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="current_sim">Current SIM</label>
+                        <select id="current_sim" name="current_sim" required>
+                            <option>Airtel</option>
+                            <option>Jio</option>
+                            <option>Vi</option>
+                            <option>BSNL</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="plan_type">Plan Type</label>
+                        <select id="plan_type" name="plan_type">
+                            <option>Prepaid</option>
+                            <option>Postpaid</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="contract_type">Contract Type</label>
+                        <select id="contract_type" name="contract_type">
+                            <option>No Contract</option>
+                            <option>Monthly</option>
+                            <option>Yearly</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="tenure">Tenure (months)</label>
+                        <input id="tenure" type="number" name="tenure"
+                               min="0" value="12" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="churn">Churn Status</label>
+                        <select id="churn" name="churn">
+                            <option>No</option>
+                            <option>Yes</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <section class="form-section">
+                <div class="section-heading">
+                    <div class="section-number">02</div>
+                    <div>
+                        <h2>Recharge & Usage</h2>
+                        <p>Customer spending and usage behaviour</p>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="monthly_recharge">Monthly Recharge (₹)</label>
+                        <input id="monthly_recharge" type="number"
+                               name="monthly_recharge" min="0" step="0.01"
+                               value="399" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="outstanding_balance">Outstanding Balance (₹)</label>
+                        <input id="outstanding_balance" type="number"
+                               name="outstanding_balance" min="0" step="0.01"
+                               value="0" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="days_since_recharge">Days Since Last Recharge</label>
+                        <input id="days_since_recharge" type="number"
+                               name="days_since_recharge" min="0"
+                               value="5" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="data_usage">Data Usage (GB)</label>
+                        <input id="data_usage" type="number" name="data_usage"
+                               min="0" step="0.01" value="10" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="call_minutes">Call Minutes Used</label>
+                        <input id="call_minutes" type="number"
+                               name="call_minutes" min="0" value="300" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="sms_used">SMS Used</label>
+                        <input id="sms_used" type="number" name="sms_used"
+                               min="0" value="50" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="payment_method">Payment Method</label>
+                        <select id="payment_method" name="payment_method">
+                            <option>UPI</option>
+                            <option>Credit Card</option>
+                            <option>Debit Card</option>
+                            <option>Net Banking</option>
+                            <option>Cash</option>
+                            <option>Auto Pay</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="plan_changes">Plan Changes Last Year</label>
+                        <input id="plan_changes" type="number"
+                               name="plan_changes" min="0" value="1" required>
+                    </div>
+                </div>
+            </section>
+
+            <section class="form-section">
+                <div class="section-heading">
+                    <div class="section-number">03</div>
+                    <div>
+                        <h2>Network Experience</h2>
+                        <p>Signal quality, satisfaction and customer support</p>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="network_type">Network Type</label>
+                        <select id="network_type" name="network_type">
+                            <option>4G</option>
+                            <option>5G</option>
+                            <option>3G</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="device_5g">5G-Capable Device?</label>
+                        <select id="device_5g" name="device_5g">
+                            <option>Yes</option>
+                            <option>No</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="5g_available">5G Available in Area?</label>
+                        <select id="5g_available" name="5g_available">
+                            <option>Yes</option>
+                            <option>No</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="network_satisfaction">Network Satisfaction (1–5)</label>
+                        <select id="network_satisfaction"
+                                name="network_satisfaction">
+                            <option>1</option>
+                            <option>2</option>
+                            <option selected>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="call_quality">Call Quality Score (1–5)</label>
+                        <select id="call_quality" name="call_quality">
+                            <option>1</option>
+                            <option>2</option>
+                            <option selected>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="support_calls">Support Calls</label>
+                        <input id="support_calls" type="number"
+                               name="support_calls" min="0" value="1" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="complaints">Complaints Raised</label>
+                        <input id="complaints" type="number"
+                               name="complaints" min="0" value="0" required>
+                    </div>
+                </div>
+            </section>
+
+            <div class="form-actions">
+                <p class="note">
+                    This model estimates an alternative SIM destination
+                    for customers who switch. It does not confirm that
+                    a customer will actually switch.
+                </p>
+
+                <div class="button-group">
+                    <a href="/" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">
+                        Predict SIM Destination →
+                    </button>
+                </div>
+            </div>
+
+        </form>
+    </main>
+
+    <footer class="footer">
+        © 2026 BharatConnect | Telecom Customer Intelligence Platform
+    </footer>
+
+</body>
+</html>

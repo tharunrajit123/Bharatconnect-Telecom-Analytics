@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Customer Analysis | BharatConnect</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            Bharat<span>Connect</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/customer">Customer Analysis</a>
+            <a href="#">Churn Prediction</a>
+            <a href="#">SIM Switching</a>
+        </div>
+
+    </nav>
+
+
+    <!-- PAGE HEADER -->
+
+    <section class="page-header">
+
+        <p class="small-title">
+            CUSTOMER INTELLIGENCE
+        </p>
+
+        <h1>
+            Analyze Customer
+            <span>Behavior</span>
+        </h1>
+
+        <p>
+            Enter customer information to analyze telecom
+            usage and predict customer risk.
+        </p>
+
+    </section>
+
+
+    <!-- CUSTOMER FORM -->
+
+    <section class="customer-section">
+
+        <div class="form-card">
+
+            <h2>Customer Details</h2>
+
+            <p class="form-description">
+                Enter the customer's telecom information.
+            </p>
+
+
+            <form action="/customer" method="POST">
+
+                <!-- ROW 1 -->
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label>Customer ID</label>
+
+                        <input
+                            type="text"
+                            name="customer_id"
+                            placeholder="Example: BCT507609"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Age</label>
+
+                        <input
+                            type="number"
+                            name="age"
+                            min="18"
+                            max="100"
+                            placeholder="Age"
+                            required>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ROW 2 -->
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label>Gender</label>
+
+                        <select name="gender">
+
+                            <option value="Male">
+                                Male
+                            </option>
+
+                            <option value="Female">
+                                Female
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>State</label>
+
+                        <select name="state">
+
+                            <option>Tamil Nadu</option>
+                            <option>Kerala</option>
+                            <option>Karnataka</option>
+                            <option>Andhra Pradesh</option>
+                            <option>Telangana</option>
+                            <option>Maharashtra</option>
+                            <option>Delhi</option>
+                            <option>Punjab</option>
+                            <option>Odisha</option>
+                            <option>West Bengal</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ROW 3 -->
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label>Current SIM</label>
+
+                        <select name="current_sim">
+
+                            <option>Jio</option>
+                            <option>Airtel</option>
+                            <option>Vi</option>
+                            <option>BSNL</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Plan Type</label>
+
+                        <select name="plan_type">
+
+                            <option>Prepaid</option>
+                            <option>Postpaid</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ROW 4 -->
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label>Contract Type</label>
+
+                        <select name="contract_type">
+
+                            <option>No Contract</option>
+                            <option>Monthly</option>
+                            <option>Annual</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Tenure (Months)</label>
+
+                        <input
+                            type="number"
+                            name="tenure"
+                            placeholder="Example: 12"
+                            required>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ROW 5 -->
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label>Monthly Recharge (₹)</label>
+
+                        <input
+                            type="number"
+                            step="0.01"
+                            name="monthly_recharge"
+                            placeholder="Example: 699"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Data Usage (GB)</label>
+
+                        <input
+                            type="number"
+                            step="0.01"
+                            name="data_usage"
+                            placeholder="Example: 15.5"
+                            required>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ROW 6 -->
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label>Network Type</label>
+
+                        <select name="network_type">
+
+                            <option>4G</option>
+                            <option>5G</option>
+                            <option>3G</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Network Satisfaction</label>
+
+                        <select name="network_satisfaction">
+
+                            <option value="1">1 - Very Poor</option>
+                            <option value="2">2 - Poor</option>
+                            <option value="3">3 - Average</option>
+                            <option value="4">4 - Good</option>
+                            <option value="5">5 - Excellent</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ROW 7 -->
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label>Call Quality Score</label>
+
+                        <select name="call_quality">
+
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Support Calls</label>
+
+                        <input
+                            type="number"
+                            name="support_calls"
+                            min="0"
+                            placeholder="Example: 2"
+                            required>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ROW 8 -->
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label>Complaints Raised</label>
+
+                        <input
+                            type="number"
+                            name="complaints"
+                            min="0"
+                            placeholder="Example: 1"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>5G Available Area</label>
+
+                        <select name="5g_available">
+
+                            <option>Yes</option>
+                            <option>No</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SUBMIT -->
+
+                <button type="submit" class="analyze-btn">
+
+                    🔍 Analyze Customer
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <p>
+            © 2026 BharatConnect | Telecom Customer Intelligence
+        </p>
+
+    </footer>
+
+</body>
+
+</html>

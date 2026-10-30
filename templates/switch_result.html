@@ -1,0 +1,278 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIM Prediction Result | BharatConnect</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f3f6fc;
+            color: #172b4d;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 12px rgba(20, 40, 80, 0.06);
+        }
+
+        .brand {
+            color: #1769e8;
+            font-size: 23px;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .home-link {
+            color: #40516b;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(120deg, #e8f1ff, #f7f9ff);
+        }
+
+        .eyebrow {
+            color: #1769e8;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .hero h1 {
+            font-size: clamp(27px, 4vw, 36px);
+            margin: 10px 0;
+            color: #102344;
+        }
+
+        .hero p {
+            color: #64748b;
+            max-width: 600px;
+            margin: auto;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 850px;
+            padding: 0 20px;
+            margin: 35px auto;
+        }
+
+        .result-card {
+            background: white;
+            padding: 32px;
+            border-radius: 18px;
+            box-shadow: 0 12px 40px rgba(30, 55, 100, 0.08);
+        }
+
+        .result-label {
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .sim-name {
+            text-align: center;
+            font-size: 36px;
+            font-weight: 800;
+            color: #1769e8;
+            margin: 8px 0 22px;
+        }
+
+        .sim-badge {
+            display: inline-block;
+            background: #e8f1ff;
+            color: #1769e8;
+            border-radius: 8px;
+            padding: 5px 12px;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+            margin: 25px 0;
+        }
+
+        .metric {
+            background: #f5f8fd;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e9eef7;
+        }
+
+        .metric-label {
+            color: #718096;
+            font-size: 13px;
+        }
+
+        .metric-value {
+            color: #172b4d;
+            font-size: 22px;
+            font-weight: 800;
+            margin-top: 6px;
+        }
+
+        .notice {
+            background: #fff8e8;
+            border: 1px solid #f5e5b8;
+            color: #77591c;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 13px;
+            margin-top: 20px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .btn-primary {
+            color: white;
+            background: #1769e8;
+        }
+
+        .btn-secondary {
+            color: #40516b;
+            background: #eef3fa;
+        }
+
+        .footer {
+            text-align: center;
+            color: #8995a7;
+            padding: 25px 15px;
+            font-size: 12px;
+        }
+
+        @media (max-width: 520px) {
+            .result-card {
+                padding: 22px 17px;
+            }
+
+            .metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                padding: 15px 5%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="/" class="brand">BharatConnect</a>
+        <a href="/" class="home-link">← Home</a>
+    </nav>
+
+    <header class="hero">
+        <div class="eyebrow">MACHINE LEARNING ANALYSIS</div>
+        <h1>SIM Switching Results</h1>
+        <p>
+            Your customer profile has been processed by the
+            SIM destination prediction model.
+        </p>
+    </header>
+
+    <main class="container">
+        <section class="result-card">
+
+            <p class="result-label">CURRENT SERVICE PROVIDER</p>
+            <h2 class="sim-name" style="font-size: 25px; color: #334155;">
+                {{ current_sim }}
+            </h2>
+
+            <p class="result-label">PREDICTED ALTERNATIVE SIM</p>
+            <h2 class="sim-name">
+                {{ predicted_sim }}
+                <span class="sim-badge">Predicted</span>
+            </h2>
+
+            <div class="metrics">
+                <div class="metric">
+                    <div class="metric-label">Current SIM</div>
+                    <div class="metric-value">{{ current_sim }}</div>
+                </div>
+
+                <div class="metric">
+                    <div class="metric-label">Alternative SIM</div>
+                    <div class="metric-value">{{ predicted_sim }}</div>
+                </div>
+
+                <div class="metric">
+                    <div class="metric-label">Model Score</div>
+                    <div class="metric-value">{{ confidence }}%</div>
+                </div>
+
+                <div class="metric">
+                    <div class="metric-label">Analysis Status</div>
+                    <div class="metric-value" style="font-size: 18px;">
+                        Complete
+                    </div>
+                </div>
+            </div>
+
+            <div class="notice">
+                <strong>Important:</strong>
+                This model was trained on customers who had a recorded
+                SIM switch. The score represents the model's score for
+                the selected alternative, not the probability that the
+                customer will actually switch. It is not a guarantee
+                of future behaviour.
+            </div>
+
+            <div class="actions">
+                <a href="/sim-switch" class="btn btn-primary">
+                    Predict Another Customer
+                </a>
+
+                <a href="/" class="btn btn-secondary">
+                    Back to Home
+                </a>
+            </div>
+
+        </section>
+    </main>
+
+    <footer class="footer">
+        © 2026 BharatConnect | Telecom Customer Intelligence Platform
+    </footer>
+
+</body>
+</html>
