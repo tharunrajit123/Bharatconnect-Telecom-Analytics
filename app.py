@@ -375,7 +375,9 @@ def sim_switch():
 @app.route("/dashboard")
 def dashboard():
 
-    data = df.copy()
+    # IMPORTANT: Do not copy the full dataset.
+    # Use the existing global DataFrame directly.
+    data = df
 
     sim_counts = {}
     churn_by_sim = {}
@@ -387,7 +389,7 @@ def dashboard():
     network_counts = {}
     region_counts = {}
 
-    total_customers = int(len(data))
+    total_customers = len(data)
     churned_count = 0
     retained_count = 0
     churn_rate = 0.0
@@ -397,18 +399,27 @@ def dashboard():
     highest_churn_sim = "N/A"
     highest_churn_rate = 0.0
 
-    # Customers by SIM
+    # 1. Customers by SIM
     if "CurrentSIM" in data.columns:
-        counts = data["CurrentSIM"].fillna("Unknown").value_counts()
-        sim_counts = {str(k): int(v) for k, v in counts.items()}
+        sim_series = data["CurrentSIM"].fillna("Unknown")
+        counts = sim_series.value_counts()
+
+        sim_counts = {
+            str(k): int(v) for k, v in counts.items()
+        }
 
         if sim_counts:
-            most_popular_sim = max(sim_counts, key=sim_counts.get)
+            most_popular_sim = max(
+                sim_counts, key=sim_counts.get
+            )
 
-    # Churn totals
+    # 2. Churn calculations
+    churn_flag = None
+
     if "Churn" in data.columns:
         churn_series = (
-            data["Churn"].fillna("Unknown").astype(str).str.strip()
+            data["Churn"].fillna("Unknown")
+            .astype(str).str.strip()
         )
 
         churn_counts = {
@@ -416,48 +427,51 @@ def dashboard():
             for k, v in churn_series.value_counts().items()
         }
 
-        churned_count = int(
-            churn_series.str.lower().isin(
-                ["yes", "1", "true"]
-            ).sum()
+        churn_flag = churn_series.str.lower().isin(
+            ["yes", "1", "true"]
         )
 
-        retained_count = max(total_customers - churned_count, 0)
+        churned_count = int(churn_flag.sum())
+        retained_count = total_customers - churned_count
 
-        if total_customers > 0:
+        if total_customers:
             churn_rate = round(
                 churned_count / total_customers * 100, 2
             )
 
-    # Churn rate by SIM
-    if {"CurrentSIM", "Churn"}.issubset(data.columns):
-        for sim in data["CurrentSIM"].dropna().unique():
-            sim_data = data[data["CurrentSIM"] == sim]
+    # 3. Churn rate by SIM (using groupby)
+    if churn_flag is not None and "CurrentSIM" in data.columns:
 
-            labels = (
-                sim_data["Churn"].fillna("").astype(str)
-                .str.strip().str.lower()
-            )
+        churn_temp = pd.DataFrame({
+            "SIM": data["CurrentSIM"],
+            "ChurnFlag": churn_flag
+        })
 
-            count = len(sim_data)
-            churned = labels.isin(["yes", "1", "true"]).sum()
+        grouped = churn_temp.dropna(
+            subset=["SIM"]
+        ).groupby("SIM")["ChurnFlag"].mean() * 100
 
-            churn_by_sim[str(sim)] = round(
-                churned / count * 100, 2
-            ) if count else 0.0
+        churn_by_sim = {
+            str(k): round(float(v), 2)
+            for k, v in grouped.items()
+        }
 
         if churn_by_sim:
             highest_churn_sim = max(
                 churn_by_sim, key=churn_by_sim.get
             )
-            highest_churn_rate = churn_by_sim[highest_churn_sim]
+            highest_churn_rate = churn_by_sim[
+                highest_churn_sim
+            ]
 
-    # Switch destination counts
+        del churn_temp, grouped
+
+    # 4. SIM switching destinations
     if "SwitchedSIM" in data.columns:
-        switched = (
-            data["SwitchedSIM"].fillna("No Switch")
-            .astype(str).str.strip()
-        )
+
+        switched = data["SwitchedSIM"].fillna(
+            "No Switch"
+        ).astype(str).str.strip()
 
         actual_switchers = switched[
             switched.str.lower() != "no switch"
@@ -470,23 +484,31 @@ def dashboard():
 
         switchers_count = int(len(actual_switchers))
 
-    # Switch reasons
+        del actual_switchers
+
+    # 5. Switch reasons
     if "SwitchReason" in data.columns:
+
+        reasons = data["SwitchReason"]
+
         if "SwitchedSIM" in data.columns:
-            mask = (
-                data["SwitchedSIM"].fillna("No Switch")
+            switched_mask = (
+                data["SwitchedSIM"]
+                .fillna("No Switch")
                 .astype(str).str.strip().str.lower()
                 .ne("no switch")
             )
-            reason_data = data.loc[mask, "SwitchReason"]
-        else:
-            reason_data = data["SwitchReason"]
+            reasons = reasons[switched_mask]
+            del switched_mask
 
-        for reason_text in reason_data.dropna().astype(str):
-            for reason in reason_text.split(";"):
+        for reason_text in reasons.dropna():
+
+            for reason in str(reason_text).split(";"):
                 reason = reason.strip()
 
-                if reason and reason.lower() not in ("nan", "none"):
+                if reason and reason.lower() not in (
+                    "nan", "none"
+                ):
                     switch_reasons[reason] = (
                         switch_reasons.get(reason, 0) + 1
                     )
@@ -494,34 +516,53 @@ def dashboard():
         switch_reasons = dict(
             sorted(
                 switch_reasons.items(),
-                key=lambda item: item[1],
+                key=lambda x: x[1],
                 reverse=True
             )[:10]
         )
 
-    # Risk levels
+    # 6. Risk levels
     if "RiskLevel" in data.columns:
-        counts = data["RiskLevel"].fillna("Unknown").value_counts()
-        risk_counts = {str(k): int(v) for k, v in counts.items()}
+        counts = data["RiskLevel"].fillna(
+            "Unknown"
+        ).value_counts()
 
-    # Plan types
+        risk_counts = {
+            str(k): int(v) for k, v in counts.items()
+        }
+
+    # 7. Plan types
     if "PlanType" in data.columns:
-        counts = data["PlanType"].fillna("Unknown").value_counts()
-        plan_counts = {str(k): int(v) for k, v in counts.items()}
+        counts = data["PlanType"].fillna(
+            "Unknown"
+        ).value_counts()
 
-    # Network types
+        plan_counts = {
+            str(k): int(v) for k, v in counts.items()
+        }
+
+    # 8. Network types
     if "NetworkType" in data.columns:
-        counts = data["NetworkType"].fillna("Unknown").value_counts()
-        network_counts = {str(k): int(v) for k, v in counts.items()}
+        counts = data["NetworkType"].fillna(
+            "Unknown"
+        ).value_counts()
 
-    # Regions
+        network_counts = {
+            str(k): int(v) for k, v in counts.items()
+        }
+
+    # 9. Regions
     if "Region" in data.columns:
-        counts = data["Region"].fillna("Unknown").value_counts()
-        region_counts = {str(k): int(v) for k, v in counts.items()}
+        counts = data["Region"].fillna(
+            "Unknown"
+        ).value_counts()
+
+        region_counts = {
+            str(k): int(v) for k, v in counts.items()
+        }
 
     return render_template(
         "dashboard.html",
-        df=data,
         total_customers=total_customers,
         customers_count=total_customers,
         churned_count=churned_count,
